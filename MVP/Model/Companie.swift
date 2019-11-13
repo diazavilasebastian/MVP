@@ -8,11 +8,18 @@
 
 import Foundation
 
-struct Company {
+struct Company: Codable {
 
     var id: Int
     var logoPath: String
     var name: String
     var originCountry: String
-    
+
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case logoPath = "logo_path"
+        case name = "name"
+        case originCountry = "origin_country"
+    }
+
 }

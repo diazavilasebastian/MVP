@@ -18,6 +18,7 @@
 		605DA7652371040700736797 /* Movie.json in Resources */ = {isa = PBXBuildFile; fileRef = 605DA7642371040700736797 /* Movie.json */; };
 		605DA76D2371055100736797 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605DA76C2371055100736797 /* ModelTests.swift */; };
 		605DA76F2371068300736797 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605DA76E2371068300736797 /* Result.swift */; };
+		60B9DF94237393F20047745B /* ApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B9DF93237393F20047745B /* ApiRouter.swift */; };
 		8186BC9CB1E0A8CCE2EBB7B2 /* Pods_MVPTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1752E959D714A13AB8991727 /* Pods_MVPTests.framework */; };
 		C15DCDD592A27335C793B6DF /* Pods_MVP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA147E01DD90FF121040218C /* Pods_MVP.framework */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 		605DA7692371051C00736797 /* MVPTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MVPTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		605DA76C2371055100736797 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		605DA76E2371068300736797 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		60B9DF93237393F20047745B /* ApiRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRouter.swift; sourceTree = "<group>"; };
 		7A632A5A9CDA2A20164DE2E0 /* Pods-MVPTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVPTests.release.xcconfig"; path = "Target Support Files/Pods-MVPTests/Pods-MVPTests.release.xcconfig"; sourceTree = "<group>"; };
 		FA147E01DD90FF121040218C /* Pods_MVP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -127,7 +129,6 @@
 				605DA72C2370F5B900736797 /* View */,
 				605DA72B2370F57500736797 /* Model */,
 				605DA70B2370EBFB00736797 /* AppDelegate.swift */,
-				605DA70D2370EBFB00736797 /* HomeViewController.swift */,
 				605DA7122370EBFC00736797 /* Assets.xcassets */,
 				605DA7142370EBFC00736797 /* LaunchScreen.storyboard */,
 				605DA7172370EBFC00736797 /* Info.plist */,
@@ -148,6 +149,7 @@
 		605DA72C2370F5B900736797 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				605DA70D2370EBFB00736797 /* HomeViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				605DA74E2370FD8B00736797 /* ApiService.swift */,
+				60B9DF93237393F20047745B /* ApiRouter.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				605DA74F2370FD8B00736797 /* ApiService.swift in Sources */,
 				605DA70C2370EBFB00736797 /* AppDelegate.swift in Sources */,
 				605DA76F2371068300736797 /* Result.swift in Sources */,
+				60B9DF94237393F20047745B /* ApiRouter.swift in Sources */,
 				605DA7352370F7A500736797 /* Movie.swift in Sources */,
 				605DA7392370F93700736797 /* Genre.swift in Sources */,
 			);
@@ -598,7 +602,8 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MVPTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -607,6 +612,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tranning.MVPTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MVPTests/Model/MVPTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -621,7 +627,8 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MVPTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -630,6 +637,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tranning.MVPTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MVPTests/Model/MVPTests-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
