@@ -25,7 +25,7 @@ class MovieProvider: ProviderProtocol {
     var service: ServiceProtocol
     
     
-    init(service: ServiceProtocol) {
+    init(service: ServiceProtocol = ApiService()) {
         self.service = service
     }
     

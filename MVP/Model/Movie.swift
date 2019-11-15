@@ -18,8 +18,8 @@ struct Movie: Codable {
     var popularity: Double
     var posterPath: String
 
-    var productionCompanies: [Company]
-    var genres: [Genre]
+    var productionCompanies: [Company]? = []
+    var genres: [Genre]? = []
 
     var status: String
     var tagline: String

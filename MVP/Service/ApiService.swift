@@ -34,9 +34,7 @@ class ApiService: ServiceProtocol {
     let manager: SessionManager
     let configuration: URLSessionConfiguration
 
-    static let shared: ApiService = ApiService()
-
-    private init() {
+    init() {
         configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 5
         configuration.timeoutIntervalForResource = 5
