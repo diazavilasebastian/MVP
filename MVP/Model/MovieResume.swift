@@ -23,6 +23,11 @@ struct MovieResume: Codable {
     var voteCount: Int
     var video: Bool
     var voteAverage: Double
+    var posterPath: String
+
+    var urlPoster: URL {
+        return URL(string: "https://image.tmdb.org/t/p/w500"+posterPath)!
+    }
     
     enum CodingKeys: String, CodingKey {
         case adult = "adult"
@@ -38,5 +43,6 @@ struct MovieResume: Codable {
         case voteCount = "vote_count"
         case video = "video"
         case voteAverage = "vote_average"
+        case posterPath = "poster_path"
     }
 }

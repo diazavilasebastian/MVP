@@ -3,7 +3,8 @@ platform :ios, '9.0'
 
 target 'MVP' do
   use_frameworks!
-
+  
+  pod 'SDWebImage'
   pod 'Alamofire'
 
   target 'MVPTests' do
