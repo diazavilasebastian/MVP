@@ -10,7 +10,7 @@ import Foundation
 
 protocol ProviderProtocol {
 
-    typealias listMoviesResult = (Result<[Movie],ErrorService>) -> Void
+    typealias listMoviesResult = (Result<PageMovies,ErrorService>) -> Void
     typealias movieResult = (Result<Movie,ErrorService>) -> Void
 
     func getMovie(id: Int, completition: @escaping movieResult )

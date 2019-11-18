@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-class MovieTableViewCell: UITableViewCell {
+class MoviesTableViewCell: UITableViewCell {
     
-    var movie: Movie? {
+    var movie: MovieResume? {
         didSet {
             movieNameLabel.text = movie?.title
         }
@@ -20,7 +20,7 @@ class MovieTableViewCell: UITableViewCell {
     private let movieNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
-        lbl.font = UIFont.boldSystemFont(ofSize: 16)
+        lbl.font = UIFont.boldSystemFont(ofSize: 24)
         lbl.textAlignment = .left
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -40,8 +40,10 @@ class MovieTableViewCell: UITableViewCell {
 
     func setupConstrains() {
         NSLayoutConstraint.activate([
-            .init(item: movieNameLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0),
+            .init(item: movieNameLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 30),
             .init(item: movieNameLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0),
+            .init(item: movieNameLabel, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 30),
+            .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: movieNameLabel, attribute: .bottom, multiplier: 1.0, constant: 30),
         ])
     }
     

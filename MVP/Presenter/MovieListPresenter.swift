@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol MovieListPresenterProtocol {
+protocol MoviesPresenterProtocol {
     func attachView(view : ListMovieViewProtocol)
     func deAttachView()
     
@@ -34,7 +34,7 @@ class MovielistPresenter {
 
 }
 
-extension MovielistPresenter: MovieListPresenterProtocol {
+extension MovielistPresenter: MoviesPresenterProtocol {
     
      //MARK: INTERACTION VIEW
     func selectMovie(idMovie: Int) {
@@ -55,8 +55,11 @@ extension MovielistPresenter: MovieListPresenterProtocol {
         provider?.getPopular { [weak self] result in
             self?.view?.finishLoading()
             switch result {
-            case let .success(movies):
-                self?.view?.refreshList(movies: movies)
+            case let .success(page):
+                self?.view?.refreshList(movies: page.results)
+                break
+            case let .error(error):
+                debugPrint(error)
                 break
             default:
                 break

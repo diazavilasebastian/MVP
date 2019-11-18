@@ -11,14 +11,8 @@ import UIKit
 
 class ListMovieDataSource: NSObject {
     
-    var movies: [Movie] = []
-    
-    override init() {
-        movies = [
-            Movie(id: 1, imdbId: "a", originalLanguage: "a", originalTitle: "A", overview: "A", popularity: 2.6, posterPath: "AWDA", productionCompanies: nil, genres: nil, status: "awd", tagline: "awd", title: "awd", voteAverage: 2.3)
-        ]
-    }
-    
+    var movies: [MovieResume] = []
+        
 }
 
 extension ListMovieDataSource: UITableViewDataSource {
@@ -27,7 +21,7 @@ extension ListMovieDataSource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = MovieTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MOVIECELL") as! MoviesTableViewCell
         cell.movie = movies[indexPath.row]
         return cell
     }
