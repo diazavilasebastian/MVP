@@ -19,6 +19,7 @@ class MoviesViewController: UIViewController {
     
     var datasource: ListMovieDataSource?
     var tableView: UITableView?
+    var refreshControl: UIRefreshControl
     var presenter: MoviesPresenterProtocol
 
     lazy var loadingView: UIActivityIndicatorView = {
@@ -32,10 +33,9 @@ class MoviesViewController: UIViewController {
     
     init() {
         tableView = UITableView(frame: .zero)
-        tableView?.translatesAutoresizingMaskIntoConstraints = false
+        refreshControl = UIRefreshControl()
         datasource = ListMovieDataSource()
-        tableView?.dataSource = self.datasource
-        tableView?.register(MoviesTableViewCell.self, forCellReuseIdentifier: "MOVIECELL")
+
         presenter = MovielistPresenter(provider: MovieProvider())
         super.init(nibName: nil, bundle: nil)
         self.configView()
@@ -54,7 +54,7 @@ class MoviesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.attachView(view: self)
-        presenter.viewDidLoad()
+        presenter.retreiveMovies()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,11 +68,23 @@ class MoviesViewController: UIViewController {
     }
     
     func configView() {
+        tableView?.dataSource = self.datasource
+        tableView?.register(MoviesTableViewCell.self, forCellReuseIdentifier: "MOVIECELL")
+        tableView?.translatesAutoresizingMaskIntoConstraints = false
+        tableView?.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(getMovies), for: .valueChanged)
+
         self.view.addSubview(loadingView)
+
         NSLayoutConstraint.activate([
             .init(item: loadingView, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0),
             .init(item: loadingView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1.0, constant: 0),
         ])
+    }
+
+    @objc
+    func getMovies(){
+        presenter.retreiveMovies()
     }
     
 }
@@ -87,7 +99,7 @@ extension MoviesViewController: ListMovieViewProtocol {
     }
     
     func refreshList(movies: [MovieResume]) {
-        self.datasource?.movies = movies
+        self.datasource?.movies.append(contentsOf: movies)
         tableView?.reloadData()
     }
 }

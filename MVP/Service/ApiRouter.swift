@@ -14,7 +14,7 @@ enum ApiRouter {
     case getMovie(id: Int)
     case getTopRated
     case getUpcoming
-    case getPopular
+    case getPopular(page: Int)
 
     var path: String {
         switch self {
@@ -24,8 +24,8 @@ enum ApiRouter {
             return "\(ApiRouter.baseURLString)/top_rated?api_key=\(ApiRouter.ApiKey)&language=en-US&page=1"
         case .getUpcoming:
             return "\(ApiRouter.baseURLString)/upcoming?api_key=\(ApiRouter.ApiKey)&language=en-US&page=1"
-        case .getPopular:
-            return "\(ApiRouter.baseURLString)/popular?api_key=\(ApiRouter.ApiKey)&language=en-US&page=1"
+        case let .getPopular(page):
+            return "\(ApiRouter.baseURLString)/popular?api_key=\(ApiRouter.ApiKey)&language=en-US&page=\(page)"
         }
     }
 

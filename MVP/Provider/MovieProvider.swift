@@ -16,7 +16,7 @@ protocol ProviderProtocol {
     func getMovie(id: Int, completition: @escaping movieResult )
     func getTopRated(completition: @escaping listMoviesResult)
     func getUpcoming(completition: @escaping listMoviesResult)
-    func getPopular(completition: @escaping listMoviesResult)
+    func getPopular(page: Int, completition: @escaping listMoviesResult)
 }
 
 
@@ -41,8 +41,8 @@ class MovieProvider: ProviderProtocol {
         service.getUpcoming { completition($0) }
     }
     
-    func getPopular(completition: @escaping listMoviesResult) {
-        service.getPopular { completition($0) }
+    func getPopular(page: Int, completition: @escaping listMoviesResult) {
+        service.getPopular(page: page) { completition($0) }
     }
     
 }

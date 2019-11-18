@@ -18,7 +18,7 @@ struct MovieResume: Codable {
     var originalTitle: String
     var originalLanguage: String
     var title: String
-    var backdropPath: String
+    var backdropPath: String?
     var popularity: Double
     var voteCount: Int
     var video: Bool

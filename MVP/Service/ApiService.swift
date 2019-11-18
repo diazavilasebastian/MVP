@@ -18,7 +18,7 @@ protocol ServiceProtocol {
     func getMovie(id: Int, completition: @escaping movieResult )
     func getTopRated(completition: @escaping listMoviesResult)
     func getUpcoming(completition: @escaping listMoviesResult)
-    func getPopular(completition: @escaping listMoviesResult)
+    func getPopular(page: Int, completition: @escaping listMoviesResult)
 }
 
 enum ErrorService: Error{
@@ -53,8 +53,8 @@ class ApiService: ServiceProtocol {
         }
     }
 
-    func getPopular(completition: @escaping listMoviesResult ) {
-        manager.request(ApiRouter.getPopular).validate().responseData { response in
+    func getPopular(page: Int, completition: @escaping listMoviesResult ) {
+        manager.request(ApiRouter.getPopular(page: page)).validate().responseData { response in
             completition(self.handlerResponse(response: response))
         }
     }

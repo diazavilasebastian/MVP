@@ -13,6 +13,7 @@ protocol MoviesPresenterProtocol {
     func deAttachView()
     
     // User interaction
+    func retreiveMovies()
     func selectMovie(idMovie: Int)
     func removeMovie(idMovie: Int)
     func findMovie(keywork: String)
@@ -24,17 +25,39 @@ protocol MoviesPresenterProtocol {
 }
 
 class MovielistPresenter {
-    
+
+    private var pageCurrent : Int
+
     var provider: ProviderProtocol?
     var view: ListMovieViewProtocol?
     
     init(provider: ProviderProtocol) {
         self.provider = provider
+        self.pageCurrent = 1
     }
 
 }
 
 extension MovielistPresenter: MoviesPresenterProtocol {
+    func retreiveMovies() {
+        view?.starLoading()
+        let tmpPage = pageCurrent+1
+        provider?.getPopular(page: tmpPage, completition: { [weak self] result in
+            self?.view?.finishLoading()
+            switch result {
+            case let .success(page):
+                self?.pageCurrent = tmpPage
+                self?.view?.refreshList(movies: page.results)
+                break
+            case let .error(error):
+                debugPrint(error)
+                break
+            default:
+                break
+            }
+        })
+    }
+
     
      //MARK: INTERACTION VIEW
     func selectMovie(idMovie: Int) {
@@ -51,20 +74,7 @@ extension MovielistPresenter: MoviesPresenterProtocol {
     
     //MARK: LIFE CYCLE VIEW
     func viewDidLoad() {
-        view?.starLoading()
-        provider?.getPopular { [weak self] result in
-            self?.view?.finishLoading()
-            switch result {
-            case let .success(page):
-                self?.view?.refreshList(movies: page.results)
-                break
-            case let .error(error):
-                debugPrint(error)
-                break
-            default:
-                break
-            }
-        }
+        self.retreiveMovies()
     }
     
     func viewWillAppear() {
