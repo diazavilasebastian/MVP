@@ -36,7 +36,6 @@ class MovieViewController: UIViewController {
         return view
     }()
     
-    
 
     init(model: Movie) {
         self.model = model

@@ -10,10 +10,18 @@ import Foundation
 import Quick
 import Nimble
 
+@testable import MVP
+
 class ModelTests: QuickSpec {
 
     override func spec() {
-        
+        context("") {
+            describe("") {
+                it("") {
+                    
+                }
+            }
+        }
     }
 
 }
