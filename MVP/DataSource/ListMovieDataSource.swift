@@ -12,6 +12,11 @@ import UIKit
 class ListMovieDataSource: NSObject {
     
     var movies: [MovieResume] = []
+    var cellIdentifier : String
+    
+    init(cellIdentifier: String) {
+        self.cellIdentifier = cellIdentifier
+    }
         
 }
 
@@ -21,7 +26,7 @@ extension ListMovieDataSource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MOVIECELL") as! MoviesTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MoviesTableViewCell
         cell.movie = movies[indexPath.row]
         return cell
     }

@@ -22,7 +22,7 @@ class MoviesTableViewCell: UITableViewCell {
     private lazy var movieNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
-        lbl.backgroundColor = UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: 0.2)
+        lbl.backgroundColor = UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: 0.2)
         lbl.font = UIFont.boldSystemFont(ofSize: 22)
         lbl.textAlignment = .left
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -57,8 +57,7 @@ class MoviesTableViewCell: UITableViewCell {
             .init(item: poster, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0),
             .init(item: poster, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0),
             .init(item: self, attribute: .right, relatedBy: .equal, toItem: poster, attribute: .right, multiplier: 1.0, constant: 0),
-            .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: poster, attribute: .trailing, multiplier: 1.0, constant: 0),
-            .init(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 100)
+            .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: poster, attribute: .trailing, multiplier: 1.0, constant: 0)
         ])
 
         NSLayoutConstraint.activate([

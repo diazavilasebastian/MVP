@@ -14,7 +14,7 @@ protocol MoviesPresenterProtocol {
     
     // User interaction
     func retreiveMovies()
-    func selectMovie(idMovie: Int)
+    func selectMovie(movie: MovieResume)
     func removeMovie(idMovie: Int)
     func findMovie(keywork: String)
     
@@ -29,7 +29,7 @@ class MovielistPresenter {
     private var pageCurrent : Int
 
     var provider: ProviderProtocol?
-    var view: ListMovieViewProtocol?
+    weak var view: ListMovieViewProtocol?
     
     init(provider: ProviderProtocol) {
         self.provider = provider
@@ -58,10 +58,9 @@ extension MovielistPresenter: MoviesPresenterProtocol {
         })
     }
 
-    
      //MARK: INTERACTION VIEW
-    func selectMovie(idMovie: Int) {
-        
+    func selectMovie(movie: MovieResume) {
+        self.view?.goToDetails(movie: movie)
     }
     
     func removeMovie(idMovie: Int) {

@@ -11,20 +11,24 @@ import Foundation
 struct Movie: Codable {
 
     var id: Int
-    var imdbId: String
-    var originalLanguage: String
     var originalTitle: String
     var overview: String
+    var originalLanguage: String
+    var title: String
     var popularity: Double
+    var voteAverage: Double
     var posterPath: String
-
+    
+    var imdbId: String?
     var productionCompanies: [Company]? = []
     var genres: [Genre]? = []
-
-    var status: String
-    var tagline: String
-    var title: String
-    var voteAverage: Double
+    var status: String?
+    var tagline: String?
+        
+    var urlPoster: URL {
+        return URL(string: "https://image.tmdb.org/t/p/w500"+posterPath)!
+    }
+    
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -42,6 +46,18 @@ struct Movie: Codable {
         case tagline = "tagline"
         case title = "title"
         case voteAverage = "vote_average"
+    }
+    
+    
+    init (resume: MovieResume) {
+        self.id = resume.id
+        self.originalTitle = resume.originalTitle
+        self.overview = resume.overview
+        self.originalLanguage = resume.originalLanguage
+        self.title = resume.title
+        self.popularity = resume.popularity
+        self.voteAverage = resume.voteAverage
+        self.posterPath = resume.posterPath
     }
     
 }
