@@ -58,10 +58,7 @@ class MovieViewController: UIViewController {
         self.view.addSubview(backgroundImage)
         self.view.addSubview(backgroundBlur)
         self.view.addSubview(titleLabel)
-       
-        
         self.view.backgroundColor = .white
-        
     }
     
     func addConstrains() {
@@ -85,10 +82,5 @@ class MovieViewController: UIViewController {
             .init(item: self.view, attribute: .trailing, relatedBy: .equal, toItem: backgroundBlur, attribute: .trailing, multiplier: 1.0, constant: 0),
             .init(item: self.view, attribute: .bottom, relatedBy: .equal, toItem: backgroundBlur, attribute: .bottom, multiplier: 1.0, constant: 0)
         ])
-        
-        
     }
-
-
-
 }

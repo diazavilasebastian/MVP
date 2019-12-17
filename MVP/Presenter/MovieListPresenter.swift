@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol MoviesPresenterProtocol {
+protocol MoviesPresenterProtocol: LifeCircleProtocol {
     func attachView(view : ListMovieViewProtocol)
     func deAttachView()
     
@@ -17,7 +17,9 @@ protocol MoviesPresenterProtocol {
     func selectMovie(movie: MovieResume)
     func removeMovie(idMovie: Int)
     func findMovie(keywork: String)
-    
+}
+
+protocol LifeCircleProtocol {
     //lifeCycleUI
     func viewDidLoad()
     func viewWillAppear()
@@ -35,27 +37,37 @@ class MovielistPresenter {
         self.provider = provider
         self.pageCurrent = 1
     }
+    
+    func fetchPopularMovies(page: Int) {
+        provider?.getPopular(page: page, completition: { [weak self] result in
+              self?.view?.finishLoading()
+              switch result {
+              case let .success(movies):
+                  self?.pageCurrent = page
+                  self?.view?.refreshList(movies: movies.results)
+                  break
+              case let .error(error):
+                  debugPrint(error)
+                  break
+              default:
+                  break
+              }
+        })
+    }
+    
+    func retreiveMorePages() {
+        view?.starLoading()
+        let tmpPage = pageCurrent+1
+        self.fetchPopularMovies(page: tmpPage)
+    }
 
 }
 
 extension MovielistPresenter: MoviesPresenterProtocol {
     func retreiveMovies() {
         view?.starLoading()
-        let tmpPage = pageCurrent+1
-        provider?.getPopular(page: tmpPage, completition: { [weak self] result in
-            self?.view?.finishLoading()
-            switch result {
-            case let .success(page):
-                self?.pageCurrent = tmpPage
-                self?.view?.refreshList(movies: page.results)
-                break
-            case let .error(error):
-                debugPrint(error)
-                break
-            default:
-                break
-            }
-        })
+        pageCurrent = 1
+        self.fetchPopularMovies(page: pageCurrent)
     }
 
      //MARK: INTERACTION VIEW
@@ -71,19 +83,6 @@ extension MovielistPresenter: MoviesPresenterProtocol {
     
     }
     
-    //MARK: LIFE CYCLE VIEW
-    func viewDidLoad() {
-        self.retreiveMovies()
-    }
-    
-    func viewWillAppear() {
-        
-    }
-    
-    func viewWillDisappear() {
-    
-    }
-    
     func attachView(view : ListMovieViewProtocol){
         self.view = view
     }
@@ -92,4 +91,16 @@ extension MovielistPresenter: MoviesPresenterProtocol {
         self.view = nil
     }
     
+}
+
+extension MovielistPresenter: LifeCircleProtocol {
+    func viewDidLoad() {
+        self.retreiveMovies()
+    }
+    func viewWillAppear() {
+        
+    }
+    func viewWillDisappear() {
+        
+    }
 }
