@@ -14,6 +14,7 @@ protocol MoviesPresenterProtocol: LifeCircleProtocol {
     
     // User interaction
     func retreiveMovies()
+    func retreiveMoreMovies()
     func selectMovie(movie: MovieResume)
     func removeMovie(idMovie: Int)
     func findMovie(keywork: String)
@@ -64,6 +65,10 @@ class MovielistPresenter {
 }
 
 extension MovielistPresenter: MoviesPresenterProtocol {
+    func retreiveMoreMovies() {
+        retreiveMorePages()
+    }
+    
     func retreiveMovies() {
         view?.starLoading()
         pageCurrent = 1

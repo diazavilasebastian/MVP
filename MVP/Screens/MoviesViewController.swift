@@ -23,10 +23,8 @@ protocol ListMovieViewProtocol: class {
 class MoviesViewController: UIViewController {
     
     var datasource: ListMovieDataSource?
-    var tableView: UITableView
+    var collectionView: UICollectionView
     var presenter: MoviesPresenterProtocol
-    
-    let cellIdentifier : String = "MOVIECELL"
 
     lazy var loadingView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .gray)
@@ -38,8 +36,8 @@ class MoviesViewController: UIViewController {
     
     
     init() {
-        tableView = UITableView(frame: .zero)
-        datasource = ListMovieDataSource(cellIdentifier: cellIdentifier)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        datasource = ListMovieDataSource(cellIdentifier: MoviesCollectionViewCell.identifier)
         presenter = MovielistPresenter(provider: MovieProvider())
         super.init(nibName: nil, bundle: nil)
         self.configView()
@@ -69,13 +67,13 @@ class MoviesViewController: UIViewController {
     }
     
     func configView() {
-        tableView.dataSource = self.datasource
-        tableView.delegate = self
-        tableView.register(MoviesTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.dataSource = self.datasource
+        collectionView.delegate = self
+        collectionView.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         self.view.addSubview(loadingView)
-        self.view.addSubview(self.tableView)
+        self.view.addSubview(self.collectionView)
 
         NSLayoutConstraint.activate([
             .init(item: loadingView, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0),
@@ -83,11 +81,13 @@ class MoviesViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            .init(item: tableView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0),
-            .init(item: tableView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0),
-            .init(item: self.view, attribute: .trailing, relatedBy: .equal, toItem: tableView, attribute: .trailing, multiplier: 1.0, constant: 0),
-            .init(item: self.view, attribute: .bottom, relatedBy: .equal, toItem: tableView, attribute: .bottom, multiplier: 1.0, constant: 0),
+            .init(item: collectionView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0),
+            .init(item: collectionView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0),
+            .init(item: self.view, attribute: .trailing, relatedBy: .equal, toItem: collectionView, attribute: .trailing, multiplier: 1.0, constant: 0),
+            .init(item: self.view, attribute: .bottom, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1.0, constant: 0),
         ])
+        
+        self.collectionView.backgroundColor = .white
     }
 
     @objc
@@ -114,19 +114,47 @@ extension MoviesViewController: ListMovieViewProtocol {
     
     func refreshList(movies: [MovieResume]) {
         self.datasource?.movies.append(contentsOf: movies)
-        tableView.reloadData()
+        collectionView.reloadData()
     }
 }
 
-extension MoviesViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension MoviesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let movie = datasource?.movies[indexPath.row] {
             self.presenter.selectMovie(movie: movie )
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200.0
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == (datasource?.movies.count ?? 0) - 5 {
+            self.presenter.retreiveMoreMovies()
+        }
     }
 }
 
+extension MoviesViewController: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        return CGSize(width: ((collectionView.bounds.size.width/2) - 10), height: 320)
+    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets.init(top: 0, left: 5, bottom: 0, right: 5)
+    }
+}
