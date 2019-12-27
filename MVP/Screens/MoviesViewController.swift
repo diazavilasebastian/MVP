@@ -57,7 +57,7 @@ class MoviesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         presenter.viewWillAppear()
     }
     
