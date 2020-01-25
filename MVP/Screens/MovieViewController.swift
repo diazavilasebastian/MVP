@@ -18,33 +18,49 @@ class MovieViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = 10.0
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
-    }()
-    
-    lazy var scoreView: UIView = {
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10.0
-        return view
     }()
     
     lazy var scoreLabel: UILabel = {
         let label = UILabel(frame: .zero)
-        label.textColor = UIColor(red:1.00, green:0.75, blue:0.00, alpha:1.0)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = String(Int(model.popularity.rounded()))
-        label.font = UIFont.boldSystemFont(ofSize: 40.0)
+        label.backgroundColor = .darkGray
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 40)
+        label.text = String(model.popularity.rounded())
+        label.layer.cornerRadius = 5.0
+        label.clipsToBounds = true
         label.textAlignment = .center
         return label
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.text = model.title
+        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        return label
+    }()
+    
+    lazy var scrollView: UIScrollView = {
+       let scroll = UIScrollView()
+       scroll.translatesAutoresizingMaskIntoConstraints = false
+       return scroll
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     init(model: Movie) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
-        self.title = model.title
+        self.title = "Pelicula"
         self.configView()
     }
     
@@ -60,39 +76,67 @@ class MovieViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.backItem?.title = ""
     }
     
     func configView() {
-        self.view.backgroundColor = .white
-        
-        self.view.addSubview(movieImage)
-        self.view.addSubview(scoreView)
-        self.scoreView.addSubview(scoreLabel)
-        
-        
+        self.view.backgroundColor = .black
+       
+        self.addHierarchy()
         self.addConstrains()
     }
     
+    func addHierarchy() {
+        self.scrollView.addSubview(contentView)
+        self.view.addSubview(scrollView)
+               
+        self.contentView.addSubview(titleLabel)
+        self.contentView.addSubview(movieImage)
+        self.contentView.addSubview(scoreLabel)
+    }
+    
+    
+    
     func addConstrains() {
-
+        
         NSLayoutConstraint.activate([
-            .init(item: movieImage, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .topMargin, multiplier: 1.0, constant: 20.0),
-            .init(item: movieImage, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 20.0),
-            .init(item: movieImage, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 200),
-            .init(item: movieImage, attribute: .height, relatedBy: .equal, toItem: movieImage, attribute: .width, multiplier: (CGFloat(1.5 / 1.0)), constant: 0)
+            .init(item: scrollView, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0.0)
+        ])
+        NSLayoutConstraint.activate([
+            .init(item: scrollView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0),
+            .init(item: scrollView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0.0)
         ])
         
         NSLayoutConstraint.activate([
-            .init(item: scoreView, attribute: .top, relatedBy: .equal, toItem: movieImage, attribute: .top, multiplier: 1.0, constant: 0),
-            .init(item: scoreView, attribute: .leading, relatedBy: .equal, toItem: movieImage, attribute: .trailing, multiplier: 1.0, constant: 20.0),
-            .init(item: self.view, attribute: .trailing, relatedBy: .equal, toItem: scoreView, attribute: .trailing, multiplier: 1.0, constant: 20.0)
+            .init(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 30.0),
+            .init(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: titleLabel, attribute: .trailing, multiplier: 1.0, constant: 30.0)
+        ])
+        
+        
+        NSLayoutConstraint.activate([
+            .init(item: movieImage, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: movieImage, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: movieImage, attribute: .trailing, multiplier: 1.0, constant: 30.0),
+            .init(item: movieImage, attribute: .height, relatedBy: .equal, toItem: movieImage, attribute: .width, multiplier: (movieImage.frame.size.height / movieImage.frame.size.width), constant: 0)
         ])
         
         NSLayoutConstraint.activate([
-            .init(item: scoreLabel, attribute: .top, relatedBy: .equal, toItem: scoreView, attribute: .top, multiplier: 1.0, constant: 20.0),
-            .init(item: scoreLabel, attribute: .leading, relatedBy: .equal, toItem: scoreView, attribute: .leading, multiplier: 1.0, constant: 20.0),
-            .init(item: scoreView, attribute: .trailing, relatedBy: .equal, toItem: scoreLabel, attribute: .trailing, multiplier: 1.0, constant: 20.0),
-            .init(item: scoreView, attribute: .bottom, relatedBy: .equal, toItem: scoreLabel, attribute: .bottom, multiplier: 1.0, constant: 20.0),
+            .init(item: scoreLabel, attribute: .top, relatedBy: .equal, toItem: movieImage, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: scoreLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: scoreLabel, attribute: .trailing, multiplier: 1.0, constant: 30.0)
         ])
     }
 }
