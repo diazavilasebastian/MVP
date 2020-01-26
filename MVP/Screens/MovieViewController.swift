@@ -9,9 +9,16 @@
 import UIKit
 import SDWebImage
 
+protocol MovieViewProtocol {
+    func showLoading()
+    func hideLoading()
+    func showMovieDetail(movies: Movie)}
+
+
 class MovieViewController: UIViewController {
     
     var model: Movie
+    var presenter: MoviePresenterProtocol?
     
     lazy var movieImage: UIImageView = {
         let image = SDImageCache.shared.imageFromMemoryCache(forKey: model.urlPoster.absoluteString)
@@ -28,11 +35,12 @@ class MovieViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .darkGray
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 40)
+        label.font = UIFont.boldSystemFont(ofSize: 25)
         label.text = String(model.popularity.rounded())
         label.layer.cornerRadius = 5.0
         label.clipsToBounds = true
         label.textAlignment = .center
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -41,9 +49,47 @@ class MovieViewController: UIViewController {
         label.text = model.title
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
         label.textColor = .white
         return label
     }()
+    
+    lazy var popularityLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.text = "Popularidad"
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        return label
+    }()
+    
+    lazy var overviewLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.text = "Visión general"
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        return label
+    }()
+    
+    lazy var overviewDetailLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.text = model.overview
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textColor = .white
+        return label
+    }()
+    
+    lazy var loadingView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .white)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.hidesWhenStopped = true
+        return view
+    }()
+    
     
     lazy var scrollView: UIScrollView = {
        let scroll = UIScrollView()
@@ -57,11 +103,13 @@ class MovieViewController: UIViewController {
         return view
     }()
     
-    init(model: Movie) {
+    init(model: Movie, presenter: MoviePresenterProtocol = MoviePresenter()) {
         self.model = model
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        presenter.attachView(view: self)
         self.title = "Pelicula"
-        self.configView()
+        self.setupView()
     }
     
     @available(*, unavailable)
@@ -71,10 +119,16 @@ class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.presenter?.retreiveMovieDetail(id: model.id)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        customNavigation()
+    }
+    
+    func customNavigation(){
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -84,24 +138,31 @@ class MovieViewController: UIViewController {
         self.navigationController?.navigationBar.backItem?.title = ""
     }
     
-    func configView() {
-        self.view.backgroundColor = .black
-       
-        self.addHierarchy()
-        self.addConstrains()
+    func setupView() {
+        configureView()
+        addHierarchy()
+        addConstrains()
+    }
+    
+    func configureView() {
+        view.backgroundColor = .black
     }
     
     func addHierarchy() {
-        self.scrollView.addSubview(contentView)
-        self.view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
                
-        self.contentView.addSubview(titleLabel)
-        self.contentView.addSubview(movieImage)
-        self.contentView.addSubview(scoreLabel)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(movieImage)
+        contentView.addSubview(scoreLabel)
+        contentView.addSubview(popularityLabel)
+        contentView.addSubview(overviewLabel)
+        contentView.addSubview(overviewDetailLabel)
+        contentView.addSubview(loadingView)
     }
     
     
-    
+    /// Constrains
     func addConstrains() {
         
         NSLayoutConstraint.activate([
@@ -122,9 +183,13 @@ class MovieViewController: UIViewController {
         NSLayoutConstraint.activate([
             .init(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 30.0),
             .init(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
-            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: titleLabel, attribute: .trailing, multiplier: 1.0, constant: 30.0)
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: titleLabel, attribute: .trailing, multiplier: 1.0, constant: 50.0)
         ])
         
+        NSLayoutConstraint.activate([
+            .init(item: loadingView, attribute: .centerY, relatedBy: .equal, toItem: titleLabel, attribute: .centerY, multiplier: 1.0, constant: 0.0),
+            .init(item: loadingView, attribute: .leading, relatedBy: .equal, toItem: titleLabel, attribute: .trailing, multiplier: 1.0, constant: 0.0),
+        ])
         
         NSLayoutConstraint.activate([
             .init(item: movieImage, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
@@ -134,9 +199,42 @@ class MovieViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            .init(item: popularityLabel, attribute: .top, relatedBy: .equal, toItem: movieImage, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: popularityLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+        ])
+        
+        NSLayoutConstraint.activate([
             .init(item: scoreLabel, attribute: .top, relatedBy: .equal, toItem: movieImage, attribute: .bottom, multiplier: 1.0, constant: 30.0),
-            .init(item: scoreLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: scoreLabel, attribute: .leading, relatedBy: .equal, toItem: popularityLabel, attribute: .trailing, multiplier: 1.0, constant: 10.0),
             .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: scoreLabel, attribute: .trailing, multiplier: 1.0, constant: 30.0)
         ])
+        
+        NSLayoutConstraint.activate([
+            .init(item: overviewLabel, attribute: .top, relatedBy: .equal, toItem: popularityLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: overviewLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: overviewDetailLabel, attribute: .top, relatedBy: .equal, toItem: overviewLabel, attribute: .bottom, multiplier: 1.0, constant: 10.0),
+        ])
+        
+        NSLayoutConstraint.activate([
+            .init(item: overviewDetailLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: overviewDetailLabel, attribute: .trailing, multiplier: 1.0, constant: 30.0),
+        ])
+        
     }
+}
+
+
+extension MovieViewController: MovieViewProtocol {
+    func showLoading() {
+        self.loadingView.startAnimating()
+    }
+    
+    func hideLoading() {
+        self.loadingView.stopAnimating()
+    }
+    
+    func showMovieDetail(movies: Movie) {
+        
+    }
+
 }

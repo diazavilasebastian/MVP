@@ -60,6 +60,7 @@ class ApiService: ServiceProtocol {
     }
 
     func getMovie(id: Int, completition: @escaping movieResult ) {
+        debugPrint(id)
         manager.request(ApiRouter.getMovie(id: id)).validate().responseData { response in
             completition(self.handlerResponse(response: response))
         }
