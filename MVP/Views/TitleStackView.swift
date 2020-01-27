@@ -14,6 +14,7 @@ class TitleStackView: UIView {
     var title: String
     var axis: NSLayoutConstraint.Axis
     var distribution: UIStackView.Distribution
+    var spacing: CGFloat = 5.0
     
     lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
@@ -25,9 +26,9 @@ class TitleStackView: UIView {
     }()
     
     lazy var scrollView: UIScrollView = {
-       let scroll = UIScrollView()
-       scroll.translatesAutoresizingMaskIntoConstraints = false
-       return scroll
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        return scroll
     }()
     
     lazy var contentView: UIView = {
@@ -40,6 +41,8 @@ class TitleStackView: UIView {
         let stackView = UIStackView(frame: .zero)
         stackView.axis = self.axis
         stackView.distribution = self.distribution
+        stackView.spacing = self.spacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
@@ -74,21 +77,37 @@ extension TitleStackView {
         self.backgroundColor = .black
     }
     
-    func addHierarchy() {        
+    func addHierarchy() {
+        self.scrollView.addSubview(stackView)
         self.addSubview(titleLabel)
+        self.addSubview(scrollView)
     }
-    
     
     /// Constrains
     func addConstrains() {
+        
         NSLayoutConstraint.activate([
-            .init(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0),
-            .init(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0),
-            .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: titleLabel, attribute: .trailing, multiplier: 1.0, constant: 0),
-            .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: 0)
+           stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+           stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+           stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+           stackView.topAnchor.constraint(equalTo: scrollView.topAnchor)
         ])
         
-        titleLabel.setContentCompressionResistancePriority(.init(rawValue: 751), for: .vertical)
+        NSLayoutConstraint.activate([
+           .init(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0),
+           .init(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0),
+           .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: titleLabel, attribute: .trailing, multiplier: 1.0, constant: 0)
+        ])
+        
+        NSLayoutConstraint.activate([
+            .init(item: scrollView, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: 0),
+            .init(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0),
+            .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: scrollView, attribute: .trailing, multiplier: 1.0, constant: 0),
+            .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: scrollView, attribute: .bottom, multiplier: 1.0, constant: 0),
+            scrollView.widthAnchor.constraint(equalTo: self.widthAnchor)
+        ])
+               
+       
     }
     
 }

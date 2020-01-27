@@ -255,8 +255,9 @@ extension MovieViewController: MovieViewProtocol {
         genres.map {
             let label = UILabel(frame: .zero)
             label.text = $0
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
             genresViews.stackView.addArrangedSubview(label)
         }
     }
-
 }
