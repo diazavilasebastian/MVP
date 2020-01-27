@@ -1,5 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '9.0'
+# ignore all warnings from all pods
+inhibit_all_warnings!
 
 target 'MVP' do
   use_frameworks!
@@ -10,7 +12,7 @@ target 'MVP' do
   target 'MVPTests' do
     inherit! :search_paths
     pod 'Quick'
-    pod 'Nimble'
+    pod 'Nimble-Snapshots'
   end
 end
 
