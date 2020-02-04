@@ -71,6 +71,8 @@ class MoviesViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundView = UIView()
+        collectionView.backgroundView?.backgroundColor = .black
 
         self.view.addSubview(loadingView)
         self.view.addSubview(self.collectionView)

@@ -44,5 +44,5 @@ extension ApiRouter: URLRequestConvertible {
 
 extension ApiRouter {
     static let baseURLString = "https://api.themoviedb.org/3/movie"
-    static let ApiKey = "adde2ca99aaf9c49bde338ab2cee56a0"
+    static let ApiKey = "6893e0b3a6030f46d850edf87283de46"
 }
