@@ -12,7 +12,7 @@ import SDWebImage
 protocol MovieViewProtocol {
     func showLoading()
     func hideLoading()
-    func showMovieDetail(movies: Movie)}
+    func showMovieDetail(_ movie: Movie)}
 
 
 class MovieViewController: UIViewController {
@@ -42,7 +42,7 @@ class MovieViewController: UIViewController {
     
     lazy var popularityLabel: UILabel = {
         let label = UILabel(frame: .zero)
-        label.text = "Popularidad"
+        label.text = "Popularity"
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -67,7 +67,7 @@ class MovieViewController: UIViewController {
     
     lazy var overviewLabel: UILabel = {
         let label = UILabel(frame: .zero)
-        label.text = "Visión general"
+        label.text = "General review"
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -84,6 +84,25 @@ class MovieViewController: UIViewController {
         return label
     }()
     
+    lazy var tagLineLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.text = "Tagline"
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        return label
+    }()
+    
+    lazy var tagLineDetailLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.text = model.tagline
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textColor = .white
+        return label
+    }()
+    
     lazy var loadingView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .white)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -93,8 +112,20 @@ class MovieViewController: UIViewController {
     
     lazy var genresViews: TitleStackView = {
         let view = TitleStackView(title: "Genres",
+                                  axis: .horizontal,
+                                  distribution: .fillProportionally,
+                                  spacing: 10.0,
+                                  isScrollEnable: true)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var companyViews: TitleStackView = {
+        let view = TitleStackView(title: "Production companies",
                                   axis: .vertical,
-                                  distribution: .fillEqually)
+                                  distribution: .fillProportionally,
+                                  spacing: 10.0,
+                                  isScrollEnable: false)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -164,10 +195,13 @@ class MovieViewController: UIViewController {
         contentView.addSubview(movieImage)
         contentView.addSubview(scoreLabel)
         contentView.addSubview(popularityLabel)
+        contentView.addSubview(tagLineLabel)
+        contentView.addSubview(tagLineDetailLabel)
         contentView.addSubview(overviewLabel)
         contentView.addSubview(overviewDetailLabel)
         contentView.addSubview(loadingView)
         contentView.addSubview(genresViews)
+        contentView.addSubview(companyViews)
     }
     
     
@@ -219,7 +253,19 @@ class MovieViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            .init(item: overviewLabel, attribute: .top, relatedBy: .equal, toItem: popularityLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: tagLineLabel, attribute: .top, relatedBy: .equal, toItem: popularityLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: tagLineLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1.0, constant: 30.0),
+            .init(item: tagLineDetailLabel, attribute: .top, relatedBy: .equal, toItem: tagLineLabel, attribute: .bottom, multiplier: 1.0, constant: 10.0),
+        ])
+        
+        NSLayoutConstraint.activate([
+            .init(item: tagLineDetailLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: tagLineDetailLabel, attribute: .trailing, multiplier: 1.0, constant: 30.0)
+        ])
+        
+        NSLayoutConstraint.activate([
+            .init(item: overviewLabel, attribute: .top, relatedBy: .equal, toItem: tagLineDetailLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
             .init(item: overviewLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
             .init(item: overviewDetailLabel, attribute: .top, relatedBy: .equal, toItem: overviewLabel, attribute: .bottom, multiplier: 1.0, constant: 10.0),
         ])
@@ -233,7 +279,13 @@ class MovieViewController: UIViewController {
             .init(item: genresViews, attribute: .top, relatedBy: .equal, toItem: overviewDetailLabel, attribute: .bottom, multiplier: 1.0, constant: 30.0),
             .init(item: genresViews, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
             .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: genresViews, attribute: .trailing, multiplier: 1.0, constant: 30.0),
-            .init(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: genresViews, attribute: .bottom, multiplier: 1.0, constant: 30.0)
+        ])
+        
+        NSLayoutConstraint.activate([
+            .init(item: companyViews, attribute: .top, relatedBy: .equal, toItem: genresViews, attribute: .bottom, multiplier: 1.0, constant: 30.0),
+            .init(item: companyViews, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: companyViews, attribute: .trailing, multiplier: 1.0, constant: 30.0),
+            .init(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: companyViews, attribute: .bottom, multiplier: 1.0, constant: 30.0)
         ])
    
     }
@@ -249,15 +301,25 @@ extension MovieViewController: MovieViewProtocol {
         self.loadingView.stopAnimating()
     }
     
-    func showMovieDetail(movies: Movie) {
-        let genres = ["HOLA","HOLA","HOLA","HOLA","HOLA","HOLA"]
-        
-        genres.map {
+    func showMovieDetail(_ movie: Movie) {
+        guard let genresMovie = movie.genres else { return }
+        guard let companies = movie.productionCompanies else { return }
+        for genre in genresMovie {
             let label = UILabel(frame: .zero)
-            label.text = $0
+            label.text = genre.name
             label.textColor = .white
-            label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+            label.font = UIFont.systemFont(ofSize: 22, weight: .medium)
             genresViews.stackView.addArrangedSubview(label)
         }
+        
+        for companie in companies {
+            let label = UILabel(frame: .zero)
+            label.text = companie.name
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+            companyViews.stackView.addArrangedSubview(label)
+        }
+        
+        self.tagLineDetailLabel.text = movie.tagline
     }
 }

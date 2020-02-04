@@ -17,14 +17,12 @@ protocol MoviePresenterProtocol {
     func deAttachView()
     
     func retreiveMovieDetail(id: Int)
-    
 }
 
 class MoviePresenter {
     
     var view: MovieViewProtocol?
     var provider: ProviderProtocol?
-    
     
     init(provider: ProviderProtocol = MovieProvider()) {
         self.provider = provider
@@ -34,7 +32,6 @@ class MoviePresenter {
 
 extension MoviePresenter: MoviePresenterProtocol {
    
-    
     func attachView(view: MovieViewProtocol) {
         self.view = view
     }
@@ -50,7 +47,7 @@ extension MoviePresenter: MoviePresenterProtocol {
             strongSelf.view?.hideLoading()
             switch result {
             case let .success(movie):
-                strongSelf.view?.showMovieDetail(movies: movie)
+                strongSelf.view?.showMovieDetail(movie)
             case let .error(error):
                 debugPrint(error)
             default:

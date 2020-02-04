@@ -15,6 +15,7 @@ class TitleStackView: UIView {
     var axis: NSLayoutConstraint.Axis
     var distribution: UIStackView.Distribution
     var spacing: CGFloat = 5.0
+    var isScrollEnabled: Bool = true
     
     lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
@@ -27,6 +28,7 @@ class TitleStackView: UIView {
     
     lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
+        scroll.isScrollEnabled = self.isScrollEnabled
         scroll.translatesAutoresizingMaskIntoConstraints = false
         return scroll
     }()
@@ -49,10 +51,14 @@ class TitleStackView: UIView {
     init(title: String,
          axis: NSLayoutConstraint.Axis,
          distribution: UIStackView.Distribution,
+         spacing: CGFloat,
+         isScrollEnable: Bool,
          frame: CGRect = .zero) {
         self.title = title
         self.axis = axis
+        self.spacing = spacing
         self.distribution = distribution
+        self.isScrollEnabled = isScrollEnable
         super.init(frame: frame)
         self.setupView()
         
@@ -90,7 +96,8 @@ extension TitleStackView {
            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-           stackView.topAnchor.constraint(equalTo: scrollView.topAnchor)
+           stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+           stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -100,14 +107,12 @@ extension TitleStackView {
         ])
         
         NSLayoutConstraint.activate([
-            .init(item: scrollView, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: 0),
-            .init(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0),
+            .init(item: scrollView, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: 10.0),
+            .init(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 10.0),
             .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: scrollView, attribute: .trailing, multiplier: 1.0, constant: 0),
-            .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: scrollView, attribute: .bottom, multiplier: 1.0, constant: 0),
-            scrollView.widthAnchor.constraint(equalTo: self.widthAnchor)
+            .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: scrollView, attribute: .bottom, multiplier: 1.0, constant: 0)
         ])
                
-       
     }
     
 }

@@ -21,5 +21,10 @@ struct Company: Codable {
         case name = "name"
         case originCountry = "origin_country"
     }
+    
+    func getURLLogo() -> URL? {
+        guard let logoPath = self.logoPath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w500"+logoPath)
+    }
 
 }
