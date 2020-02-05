@@ -13,8 +13,6 @@
 		4152DC5423DD295B000A77DA /* MoviePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4152DC5323DD295B000A77DA /* MoviePresenter.swift */; };
 		415755642384B76B00FE057A /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415755632384B76B00FE057A /* MovieViewController.swift */; };
 		415903DD23DDDA9300A110BB /* MVPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415903DC23DDDA9300A110BB /* MVPTests.swift */; };
-		415903E523DDDAC700A110BB /* TitleStackViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415903E423DDDAC700A110BB /* TitleStackViewTests.swift */; };
-		415903E723DDDB7100A110BB /* ReferenceImages in Resources */ = {isa = PBXBuildFile; fileRef = 415903E623DDDB7100A110BB /* ReferenceImages */; };
 		41632C9E23DDB19D00DC9C5E /* TitleStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41632C9D23DDB19D00DC9C5E /* TitleStackView.swift */; };
 		41B07EB0237E01BA001DE132 /* MovieProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B07EAF237E01BA001DE132 /* MovieProvider.swift */; };
 		41B07EB4237E112D001DE132 /* ListMovieDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B07EB3237E112D001DE132 /* ListMovieDataSource.swift */; };
@@ -56,8 +54,6 @@
 		415903DA23DDDA9300A110BB /* MVPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MVPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		415903DC23DDDA9300A110BB /* MVPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVPTests.swift; sourceTree = "<group>"; };
 		415903DE23DDDA9300A110BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		415903E423DDDAC700A110BB /* TitleStackViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleStackViewTests.swift; sourceTree = "<group>"; };
-		415903E623DDDB7100A110BB /* ReferenceImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ReferenceImages; sourceTree = "<group>"; };
 		41632C9D23DDB19D00DC9C5E /* TitleStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleStackView.swift; sourceTree = "<group>"; };
 		41B07EAF237E01BA001DE132 /* MovieProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieProvider.swift; sourceTree = "<group>"; };
 		41B07EB3237E112D001DE132 /* ListMovieDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMovieDataSource.swift; sourceTree = "<group>"; };
@@ -121,10 +117,8 @@
 		415903DB23DDDA9300A110BB /* MVPTests */ = {
 			isa = PBXGroup;
 			children = (
-				415903E623DDDB7100A110BB /* ReferenceImages */,
 				415903DC23DDDA9300A110BB /* MVPTests.swift */,
 				415903DE23DDDA9300A110BB /* Info.plist */,
-				415903E423DDDAC700A110BB /* TitleStackViewTests.swift */,
 			);
 			path = MVPTests;
 			sourceTree = "<group>";
@@ -350,7 +344,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				415903E723DDDB7100A110BB /* ReferenceImages in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,7 +444,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				415903E523DDDAC700A110BB /* TitleStackViewTests.swift in Sources */,
 				415903DD23DDDA9300A110BB /* MVPTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
