@@ -33,9 +33,12 @@ class MovielistPresenter {
 
     var provider: ProviderProtocol?
     weak var view: ListMovieViewProtocol?
+    var router: RouterMovieProtocol?
     
-    init(provider: ProviderProtocol) {
+    init(provider: ProviderProtocol,
+         router: RouterMovieProtocol) {
         self.provider = provider
+        self.router = router
         self.pageCurrent = 1
     }
     
@@ -77,7 +80,7 @@ extension MovielistPresenter: MoviesPresenterProtocol {
 
      //MARK: INTERACTION VIEW
     func selectMovie(movie: MovieResume) {
-        self.view?.goToDetails(movie: movie)
+        router?.goToDetailsMovie(movie: movie)
     }
     
     func removeMovie(idMovie: Int) {
