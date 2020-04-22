@@ -18,8 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
 
         
-        let mainViewController = MoviesViewController()
-        let navigation = UINavigationController(rootViewController: mainViewController)
+
+        let navigation = UINavigationController()
+        let router = Router(navigation: navigation)
+        let presenter = MovielistPresenter(provider: MovieProvider(), router: router)
+        let mainViewController = MoviesViewController(presenter: presenter)
+        navigation.setViewControllers([mainViewController], animated: false)
 
         window?.rootViewController = navigation
         window?.makeKeyAndVisible()

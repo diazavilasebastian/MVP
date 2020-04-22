@@ -13,11 +13,6 @@ protocol ListMovieViewProtocol: class {
     func starLoading()
     func finishLoading()
     func refreshList(movies: [MovieResume])
-    
-    
-    /// QUESTION
-    /// - Parameter movie: id movie to show in detail
-    func goToDetails(movie: MovieResume)
 }
 
 class MoviesViewController: UIViewController {
@@ -35,15 +30,14 @@ class MoviesViewController: UIViewController {
     }()
     
     
-    init() {
+    init(presenter: MoviesPresenterProtocol) {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         datasource = ListMovieDataSource(cellIdentifier: MoviesCollectionViewCell.identifier)
-        presenter = MovielistPresenter(provider: MovieProvider())
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
         self.configView()
     }
     
-
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -100,12 +94,6 @@ class MoviesViewController: UIViewController {
 }
 
 extension MoviesViewController: ListMovieViewProtocol {
-    func goToDetails(movie: MovieResume) {
-        let movieDetail = Movie(resume: movie)
-        let detailMovie = MovieViewController(model: movieDetail)
-        self.navigationController?.show(detailMovie, sender: nil)
-    }
-    
     func starLoading() {
         self.loadingView.startAnimating()
     }
