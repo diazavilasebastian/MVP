@@ -23,7 +23,7 @@ DEPENDENCIES:
   - SDWebImage
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - iOSSnapshotTestCase
     - Nimble
@@ -41,4 +41,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7bd29ad8233d73fff58a6cc8af8d95657a11b83c
 
-COCOAPODS: 1.7.1
+COCOAPODS: 1.8.4
