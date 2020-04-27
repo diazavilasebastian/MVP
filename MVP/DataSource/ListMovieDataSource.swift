@@ -12,11 +12,6 @@ import UIKit
 class ListMovieDataSource: NSObject {
     
     var movies: [MovieResume] = []
-    var cellIdentifier : String
-    
-    init(cellIdentifier: String) {
-        self.cellIdentifier = cellIdentifier
-    }
         
 }
 
