@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-protocol MovieViewProtocol {
+protocol MovieViewProtocol: AnyObject {
     func showLoading()
     func hideLoading()
     func showMovieDetail(_ movie: Movie)}
