@@ -103,20 +103,20 @@ extension MoviesViewController: ListMovieViewProtocol {
     }
     
     func refreshList(movies: [MovieResume]) {
-        self.datasource?.movies.append(contentsOf: movies)
+        self.datasource?.append(elements: movies)
         collectionView.reloadData()
     }
 }
 
 extension MoviesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let movie = datasource?.movies[indexPath.row] {
+        if let movie = datasource?.getMovie(index: indexPath) {
             self.presenter.selectMovie(movie: movie )
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == (datasource?.movies.count ?? 0) - 5 {
+        if indexPath.row == (datasource?.moviesCount ?? 0) - 5 {
             self.presenter.retreiveMoreMovies()
         }
     }

@@ -11,8 +11,29 @@ import UIKit
 
 class ListMovieDataSource: NSObject {
     
-    var movies: [MovieResume] = []
-        
+    private var movies: [MovieResume]
+    
+    public var moviesCount: Int {
+        movies.count
+    }
+    
+    override init () {
+        movies = []
+    }
+    
+    func getMovie(id: Int) -> MovieResume?{
+        let result = movies.filter{ $0.id == id }
+        return result.first
+    }
+    
+    func getMovie(index: IndexPath) -> MovieResume?{
+        let result = movies[index.row]
+        return result
+    }
+    
+    func append(elements: [MovieResume]) {
+        movies.append(contentsOf: elements)
+    }
 }
 
 extension ListMovieDataSource: UICollectionViewDataSource {
