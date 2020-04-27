@@ -21,7 +21,7 @@ protocol MoviePresenterProtocol {
 
 class MoviePresenter {
     
-    var view: MovieViewProtocol?
+    weak var view: MovieViewProtocol?
     var provider: ProviderProtocol?
     
     init(provider: ProviderProtocol = MovieProvider()) {
