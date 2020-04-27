@@ -32,7 +32,7 @@ class MoviesViewController: UIViewController {
     
     init(presenter: MoviesPresenterProtocol) {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        datasource = ListMovieDataSource(cellIdentifier: MoviesCollectionViewCell.identifier)
+        datasource = ListMovieDataSource()
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
         self.configView()
